@@ -16,9 +16,25 @@ class Blockmatrix():
                str += f'{self.values[i][j]} '
             str += '\n'
         return str
+
+    def __add__(self, other):
+
+        # Missing - Check if the computation is possible:
+
+        # Add the two matrices 
+
+        newValues = []
+
+        for i in range(len(self.values)):
+            newValues.append([])
+            for j in range(len(self.values[0])):
+                newValues[i].append(self.values[i][j] + other.values[i][j])
+
+        return Blockmatrix(newValues)
             
 
 matrix1 = Blockmatrix([[2,3,3], [1,1,0]])
+matrix2 = Blockmatrix([[1,1,1], [0,0,0]])
 
-print(matrix1)
+print(matrix1 + matrix2)
 
