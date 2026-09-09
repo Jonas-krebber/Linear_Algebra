@@ -25,7 +25,6 @@ class Matrix():
 
         for i in range(len(self.matrix)):
             for j in range(len(self.matrix[i])):
-               
                str += f'{self.matrix[i][j]} '
 
             str += '\n'
@@ -132,10 +131,25 @@ class Matrix():
             newMatrix = newMatrix * self
 
         return newMatrix
-        
 
+    def trace(self):
+
+        # Check if the Matrix is square
+        assert len(self.matrix) == len(self.matrix[0]), "Matrix is not square"
+
+        # Calculating the trace of the matrix
+        sum = 0
+
+        for i in range(len(self.matrix)):
+            sum += self.matrix[i][i]
+
+        return sum
+
+        
 matrix1 = Matrix([[1,2,3], [3,1,3], [0,0,0]])
 matrix2 = Matrix([[2,0,3], [1,1,0], [1,1,1]])
 
 print(matrix1)
-print(matrix1.pow(3))
+print(matrix1.pow(3) * matrix2)
+
+print(matrix1.trace())
