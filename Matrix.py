@@ -145,6 +145,12 @@ class Matrix():
 
         return sum
 
+    def inverse(self):
+
+        # Check if the Matrix is square
+        assert len(self.matrix) == len(self.matrix[0]), "Matrix is not square"
+
+    
         
 matrix1 = Matrix([[1,2,3], [3,1,3], [0,0,0]])
 matrix2 = Matrix([[2,0,3], [1,1,0], [1,1,1]])
