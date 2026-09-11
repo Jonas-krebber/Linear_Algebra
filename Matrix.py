@@ -84,15 +84,7 @@ class Matrix():
     def transpose(self):
 
         # Transposes the Matrix as in A^T
-        newMatrix = []
-
-        for i in range(len(self.matrix[0])):
-            newRow = []
-
-            for j in range(len(self.matrix)):
-                newRow.append(self.matrix[j][i])
-
-            newMatrix.append(newRow)
+        newMatrix = [[self.matrix[j][i] for j in range(len(self.matrix))] for i in range(len(self.matrix[0]))]
 
         return Matrix(newMatrix)
 
@@ -110,12 +102,10 @@ class Matrix():
             newMatrix.append([])
 
             for j in range(len(self.matrix)):
-                sum = 0
 
-                for k in range(len(self.matrix[0])):
-                    sum += self.matrix[j][k] * other.matrix[i][k]
+                total = sum([self.matrix[j][k] * other.matrix[i][k] for k in range(len(self.matrix[0]))])
 
-                newMatrix[i].append(sum)
+                newMatrix[i].append(total)
                 
         return Matrix(newMatrix).transpose()
 
@@ -137,25 +127,46 @@ class Matrix():
         # Check if the Matrix is square
         assert len(self.matrix) == len(self.matrix[0]), "Matrix is not square"
 
-        # Calculating the trace of the matrix
-        sum = 0
+        total = sum([self.matrix[i][i] for i in range(len(self.matrix))])
 
-        for i in range(len(self.matrix)):
-            sum += self.matrix[i][i]
-
-        return sum
+        return total
 
     def inverse(self):
 
         # Check if the Matrix is square
         assert len(self.matrix) == len(self.matrix[0]), "Matrix is not square"
 
-    
+        # Checks if the diagonal is unequal to zero 
+        # for i in range(len(self.matrix)):
+        #     for j in range(len(self.matrix[i])):
+        #         if i == j:
+        #             assert self.matrix[i][j] != 0, "Matrix must have diagonal values unequal to zero" 
+
+        # Create Identitiy matrix
+        I = [[1 if i == j else 0 for j in range(len(self.matrix))] for i in range(len(self.matrix[0]))]
+
+        # Create self matrix 
+            
+
+        newMatrix = self
+
+        for i in range(len(self.matrix)):
+
+            # take the ith row and add/subtract the len -ith row
+
+            newRow = [newMatrix[i][j] + newMatrix[len(self.matrix)-i][j] for j in range(len(self.matrix[i]))]
+            
+
+        return Matrix(I)
         
-matrix1 = Matrix([[1,2,3], [3,1,3], [0,0,0]])
+matrix1 = Matrix([[1,2,3], [3,1,3], [0,0,1]])
 matrix2 = Matrix([[2,0,3], [1,1,0], [1,1,1]])
 
-print(matrix1)
+print(matrix1.transpose())
 print(matrix1.pow(3) * matrix2)
 
 print(matrix1.trace())
+
+print(matrix1.inverse())
+
+print( matrix1 * matrix2)
