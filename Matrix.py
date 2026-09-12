@@ -154,18 +154,23 @@ class Matrix():
 
                 # Checks if the current row is smaller than the last (-1), or the next one up (h)
                 if i < dim -h -1:
-                    # If it is not zero: Calculate new row; Take each element of the current row and subtract the corresponding element of the last -ith row multiplied by a factor based on the current value => Should yield 0
+                    # Calculate new row: Take each element of the current row and subtract the corresponding element of the last -ith row multiplied by a factor based on the current value => Should yield 0
                     newRow = [newMatrix[i][j] - newMatrix[i][dim-h-1]/newMatrix[dim-h-1][dim-h-1]*newMatrix[dim-h-1][j] for j in range(dim)]
-                    
+
+                    #Repeat the operation on the identity matrix 
                     newRowI = [I[i][j] - newMatrix[i][dim-h-1]/newMatrix[dim-h-1][dim-h-1]*I[dim-h-1][j] for j in range(dim)]
 
+                    # Append the new rows to the new matrix and the identity matrix 
                     newMatrix[i] = newRow
-
-                    print(I, 'h:',h, 'i:', i)
-                    
-                    I[i] = newRowI              
+                    I[i] = newRowI   
+                    print(I, 'h:',h, 'i:', i)           
                 else:
                     pass
+
+                # missing - transform the left side of the matrix to zero
+                # implement a sorting algorithm to align the matrix with the correct shape 
+                # turn all values to 1 
+                # debug for no solution 
 
         return I, newMatrix
         
