@@ -136,37 +136,47 @@ class Matrix():
         # Check if the Matrix is square
         assert len(self.matrix) == len(self.matrix[0]), "Matrix is not square"
 
-        # Checks if the diagonal is unequal to zero 
-        # for i in range(len(self.matrix)):
-        #     for j in range(len(self.matrix[i])):
-        #         if i == j:
-        #             assert self.matrix[i][j] != 0, "Matrix must have diagonal values unequal to zero" 
+        # define the dimension of the matrix
+        dim = len(self.matrix)
 
         # Create Identitiy matrix
         I = [[1 if i == j else 0 for j in range(len(self.matrix))] for i in range(len(self.matrix[0]))]
 
-        # Create self matrix 
-            
+        # Create a copy of the original matrix 
+        newMatrix = self.matrix.copy()
 
-        newMatrix = self
+        # loop through each column except for the last
+        for h in range(dim-1):
+            # Loop through each row of the matrix 
+            for i in range(dim):
 
-        for i in range(len(self.matrix)):
+                # Checks (for each row) if the last -ith element of the ith row is zero (saving computation time - missing
 
-            # take the ith row and add/subtract the len -ith row
+                # Checks if the current row is smaller than the last (-1), or the next one up (h)
+                if i < dim -h -1:
+                    # If it is not zero: Calculate new row; Take each element of the current row and subtract the corresponding element of the last -ith row multiplied by a factor based on the current value => Should yield 0
+                    newRow = [newMatrix[i][j] - newMatrix[i][dim-h-1]/newMatrix[dim-h-1][dim-h-1]*newMatrix[dim-h-1][j] for j in range(dim)]
+                    
+                    newRowI = [I[i][j] - newMatrix[i][dim-h-1]/newMatrix[dim-h-1][dim-h-1]*I[dim-h-1][j] for j in range(dim)]
 
-            newRow = [newMatrix[i][j] + newMatrix[len(self.matrix)-i][j] for j in range(len(self.matrix[i]))]
-            
+                    newMatrix[i] = newRow
 
-        return Matrix(I)
+                    print(I, 'h:',h, 'i:', i)
+                    
+                    I[i] = newRowI              
+                else:
+                    pass
+
+        return I, newMatrix
         
-matrix1 = Matrix([[1,2,3], [3,1,3], [0,0,1]])
+matrix1 = Matrix([[1,2,-1], [2,1,2], [-1,2,1]])
 matrix2 = Matrix([[2,0,3], [1,1,0], [1,1,1]])
 
-print(matrix1.transpose())
-print(matrix1.pow(3) * matrix2)
+#print(matrix1.transpose())
+#print(matrix1.pow(3) * matrix2)
 
-print(matrix1.trace())
+#print(matrix1.trace())
 
-print(matrix1.inverse())
+print('final:',matrix1.inverse())
 
-print( matrix1 * matrix2)
+#print( matrix1 * matrix2)
