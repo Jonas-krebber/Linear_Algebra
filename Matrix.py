@@ -38,15 +38,15 @@ class Matrix():
         assert len(self.matrix[0]) == len(other.matrix[0]), "Computation not possible, check column dimension"
 
         # Add the two matrices for A + B
-        newMatrix = []
+        M = []
 
         for i in range(len(self.matrix)):
-            newMatrix.append([])
+            M.append([])
 
             for j in range(len(self.matrix[0])):
-                newMatrix[i].append(self.matrix[i][j] + other.matrix[i][j])
+                M[i].append(self.matrix[i][j] + other.matrix[i][j])
 
-        return Matrix(newMatrix)
+        return Matrix(M)
 
     def __sub__(self, other):
     
@@ -55,15 +55,15 @@ class Matrix():
             assert len(self.matrix[0]) == len(other.matrix[0]), "Computation not possible, check column dimension"
     
             # Subtract the two matrices for A - B
-            newMatrix = []
+            M = []
     
             for i in range(len(self.matrix)):
-                newMatrix.append([])
+                M.append([])
 
                 for j in range(len(self.matrix[0])):
-                    newMatrix[i].append(self.matrix[i][j] - other.matrix[i][j])
+                    M[i].append(self.matrix[i][j] - other.matrix[i][j])
     
-            return Matrix(newMatrix)
+            return Matrix(M)
 
     def __eq__(self, other):
 
@@ -84,9 +84,9 @@ class Matrix():
     def transpose(self):
 
         # Transposes the Matrix as in A^T
-        newMatrix = [[self.matrix[j][i] for j in range(len(self.matrix))] for i in range(len(self.matrix[0]))]
+        M = [[self.matrix[j][i] for j in range(len(self.matrix))] for i in range(len(self.matrix[0]))]
 
-        return Matrix(newMatrix)
+        return Matrix(M)
 
     def __mul__(self, other):
 
@@ -94,20 +94,20 @@ class Matrix():
         assert len(self.matrix[0]) == len(other.matrix), "Computation not possible, check dimensions of each matrix"
                     
         # Calculate the dot product for A * B
-        newMatrix = []
+        M = []
 
         other = other.transpose()
 
         for i in range(len(other.matrix)):
-            newMatrix.append([])
+            M.append([])
 
             for j in range(len(self.matrix)):
 
                 total = sum([self.matrix[j][k] * other.matrix[i][k] for k in range(len(self.matrix[0]))])
 
-                newMatrix[i].append(total)
+                M[i].append(total)
                 
-        return Matrix(newMatrix).transpose()
+        return Matrix(M).transpose()
 
     def pow(self, power):
 
@@ -115,12 +115,12 @@ class Matrix():
         assert len(self.matrix) == len(self.matrix[0]), "Matrix is not square"
 
         # Calculate the power of the matrix as in A^3
-        newMatrix = self
+        M = self
 
         for i in range(1, power):
-            newMatrix = newMatrix * self
+            M = M * self
 
-        return newMatrix
+        return M
 
     def trace(self):
 
@@ -143,36 +143,58 @@ class Matrix():
         I = [[1 if i == j else 0 for j in range(len(self.matrix))] for i in range(len(self.matrix[0]))]
 
         # Create a copy of the original matrix 
-        newMatrix = self.matrix.copy()
+        M = self.matrix.copy()
 
-        # loop through each column except for the last
-        for h in range(dim-1):
+        # Starting the Gauss-Jordan algorithm from the top right corner: loop through each column skipping the first 
+        for h in range(1, dim):
             # Loop through each row of the matrix 
-            for i in range(dim):
-
+            for i in range(dim-1):
+            
                 # Checks (for each row) if the last -ith element of the ith row is zero (saving computation time - missing
+                # Checks if the current row is smaller than the previous one (h)
+                if i < dim -h:
 
-                # Checks if the current row is smaller than the last (-1), or the next one up (h)
-                if i < dim -h -1:
                     # Calculate new row: Take each element of the current row and subtract the corresponding element of the last -ith row multiplied by a factor based on the current value => Should yield 0
-                    newRow = [newMatrix[i][j] - newMatrix[i][dim-h-1]/newMatrix[dim-h-1][dim-h-1]*newMatrix[dim-h-1][j] for j in range(dim)]
+                    newRowM = [M[i][j] - M[i][dim-h]/M[dim-h][dim-h]*M[dim-h][j] for j in range(dim)]
 
                     #Repeat the operation on the identity matrix 
-                    newRowI = [I[i][j] - newMatrix[i][dim-h-1]/newMatrix[dim-h-1][dim-h-1]*I[dim-h-1][j] for j in range(dim)]
+                    newRowI = [I[i][j] - M[i][dim-h]/M[dim-h][dim-h]*I[dim-h][j] for j in range(dim)]
 
                     # Append the new rows to the new matrix and the identity matrix 
-                    newMatrix[i] = newRow
-                    I[i] = newRowI   
-                    print(I, 'h:',h, 'i:', i)           
+                    M[i] = newRowM
+                    I[i] = newRowI           
                 else:
                     pass
 
-                # missing - transform the left side of the matrix to zero
-                # implement a sorting algorithm to align the matrix with the correct shape 
-                # turn all values to 1 
-                # debug for no solution 
+        # Continue Gauss-Jordan Algorithm for the bottom left corner: loop through each column except for the last 
+        for h in range(dim-1):
+            # Loop through each row of the matrix (backwards)
+            for i in range(dim-1,-1,-1):
+                
+                # Checks if the current row is larger than the previous one (h)
+                if i > h:
+                    
+                    # Calculate new row: Take each element of the current row and subtract the corresponding element of the last -ith row multiplied by a factor based on the current value => Should yield 0
+                    newRowM = [M[i][j] - M[i][h]/M[h][h]*M[h][j] for j in range(dim)]
 
-        return I, newMatrix
+                    #Repeat the operation on the identity matrix 
+                    newRowI = [I[i][j] - M[i][h]/M[h][h]*I[h][j] for j in range(dim)]
+
+                    # Append the new rows to the new matrix and the identity matrix 
+                    M[i] = newRowM
+                    I[i] = newRowI       
+                else:
+                    pass
+
+        # Turn all missing values of the original matrix to 1
+
+        
+
+        # implement a sorting algorithm to align the matrix with the correct shape 
+        # turn all values to 1 
+        # debug for no solution 
+
+        return I, M
         
 matrix1 = Matrix([[1,2,-1], [2,1,2], [-1,2,1]])
 matrix2 = Matrix([[2,0,3], [1,1,0], [1,1,1]])
