@@ -145,65 +145,80 @@ class Matrix():
         # Create a copy of the original matrix 
         M = self.matrix.copy()
 
-        # Starting the Gauss-Jordan algorithm from the top right corner: loop through each column skipping the first 
-        for h in range(1, dim):
-            # Loop through each row of the matrix 
-            for i in range(dim-1):
-            
-                # Checks (for each row) if the last -ith element of the ith row is zero (saving computation time - missing
-                # Checks if the current row is smaller than the previous one (h)
-                if i < dim -h:
-
-                    # Calculate new row: Take each element of the current row and subtract the corresponding element of the last -ith row multiplied by a factor based on the current value => Should yield 0
-                    newRowM = [M[i][j] - M[i][dim-h]/M[dim-h][dim-h]*M[dim-h][j] for j in range(dim)]
-
-                    #Repeat the operation on the identity matrix 
-                    newRowI = [I[i][j] - M[i][dim-h]/M[dim-h][dim-h]*I[dim-h][j] for j in range(dim)]
-
-                    # Append the new rows to the new matrix and the identity matrix 
-                    M[i] = newRowM
-                    I[i] = newRowI           
-                else:
-                    pass
-
-        # Continue Gauss-Jordan Algorithm for the bottom left corner: loop through each column except for the last 
-        for h in range(dim-1):
-            # Loop through each row of the matrix (backwards)
-            for i in range(dim-1,-1,-1):
+        try:
+            # Starting the Gauss-Jordan algorithm from the top right corner: loop through each column skipping the first 
+            for h in range(1, dim):
+                # Loop through each row of the matrix 
+                for i in range(dim-1):
                 
-                # Checks if the current row is larger than the previous one (h)
-                if i > h:
+                    # Checks (for each row) if the last -ith element of the ith row is zero (saving computation time - missing
+                    # Checks if the current row is smaller than the previous one (h)
+                    if i < dim -h:
+
+                        # Calculate new row: Take each element of the current row and subtract the corresponding element of the last -ith row multiplied by a factor based on the current value => Should yield 0
+                        newRowM = [M[i][j] - M[i][dim-h]/M[dim-h][dim-h]*M[dim-h][j] for j in range(dim)]
+
+                        #Repeat the operation on the identity matrix 
+                        newRowI = [I[i][j] - M[i][dim-h]/M[dim-h][dim-h]*I[dim-h][j] for j in range(dim)]
+
+                        # Append the new rows to the new matrix and the identity matrix 
+                        M[i] = newRowM
+                        I[i] = newRowI           
+                    else:
+                        pass
+
+            # Continue Gauss-Jordan Algorithm for the bottom left corner: loop through each column except for the last 
+            for h in range(dim-1):
+                # Loop through each row of the matrix (backwards)
+                for i in range(dim-1,-1,-1):
                     
-                    # Calculate new row: Take each element of the current row and subtract the corresponding element of the last -ith row multiplied by a factor based on the current value => Should yield 0
-                    newRowM = [M[i][j] - M[i][h]/M[h][h]*M[h][j] for j in range(dim)]
+                    # Checks if the current row is larger than the previous one (h)
+                    if i > h:
+                        
+                        # Calculate new row: Take each element of the current row and subtract the corresponding element of the last -ith row multiplied by a factor based on the current value => Should yield 0
+                        newRowM = [M[i][j] - M[i][h]/M[h][h]*M[h][j] for j in range(dim)]
 
-                    #Repeat the operation on the identity matrix 
-                    newRowI = [I[i][j] - M[i][h]/M[h][h]*I[h][j] for j in range(dim)]
+                        #Repeat the operation on the identity matrix 
+                        newRowI = [I[i][j] - M[i][h]/M[h][h]*I[h][j] for j in range(dim)]
 
-                    # Append the new rows to the new matrix and the identity matrix 
-                    M[i] = newRowM
-                    I[i] = newRowI       
-                else:
-                    pass
+                        # Append the new rows to the new matrix and the identity matrix 
+                        M[i] = newRowM
+                        I[i] = newRowI       
+                    else:
+                        pass
+            # Turn all missing values of the original matrix to 1
+            for i in range(dim):
 
-        # Turn all missing values of the original matrix to 1
+                newRowM = [M[i][j] * 1/M[i][i] for j in range(dim)]
 
-        
+                newRowI = [I[i][j] * 1/M[i][i] for j in range(dim)]
 
+                M[i] = newRowM
+                I[i] = newRowI
+
+                for j in range(dim):
+                    if i == j and M[i][j] != 1:
+                        return 'No solution'
+                    elif i != j and M[i][j] != 0:
+                        return 'No solution' 
+                    
+        except ZeroDivisionError:
+            return 'No solution'
         # implement a sorting algorithm to align the matrix with the correct shape 
-        # turn all values to 1 
-        # debug for no solution 
 
         return I, M
+    
         
 matrix1 = Matrix([[1,2,-1], [2,1,2], [-1,2,1]])
-matrix2 = Matrix([[2,0,3], [1,1,0], [1,1,1]])
+matrix2 = Matrix([[1,1,0], [1,1,0], [1,1,1]])
+matrix3 = Matrix([[11,101,3], [5,-6,1], [50,-10,-10]])
 
 #print(matrix1.transpose())
 #print(matrix1.pow(3) * matrix2)
 
 #print(matrix1.trace())
 
-print('final:',matrix1.inverse())
+#print(matrix2.inverse())
+print(matrix3.inverse())
 
 #print( matrix1 * matrix2)
