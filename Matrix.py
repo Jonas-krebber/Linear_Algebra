@@ -206,19 +206,4 @@ class Matrix():
             return 'No solution'
         # implement a sorting algorithm to align the matrix with the correct shape 
 
-        return I, M
-    
-        
-matrix1 = Matrix([[1,2,-1], [2,1,2], [-1,2,1]])
-matrix2 = Matrix([[1,1,0], [1,1,0], [1,1,1]])
-matrix3 = Matrix([[11,101,3], [5,-6,1], [50,-10,-10]])
-
-#print(matrix1.transpose())
-#print(matrix1.pow(3) * matrix2)
-
-#print(matrix1.trace())
-
-#print(matrix2.inverse())
-print(matrix3.inverse())
-
-#print( matrix1 * matrix2)
+        return Matrix(I)
