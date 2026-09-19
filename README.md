@@ -10,7 +10,7 @@ Tested the speed of Matrix.inverse() vs numpy.invert(), vs numpy.linalg.inv():
    
    Time for M.inverse(): 1.515 e-4
    
-2.For a 5x5 matrix:
+2. For a 5x5 matrix:
 
    Time for numpy.invert(): 3.410 e-5
    
