@@ -1,25 +1,10 @@
 This will be a first repository to test all features of Git, Github, Anaconda and Python together with Visual Studio code. 
 The program itself is a small linear algebra calculator that so far can use basic operations: +, -, *, = to add, subtract, calculate the dot product, or set equal two matrices. Additionally the functions trace(), transpose(), pow(), and invert() are available.
 
-Tested the speed of Matrix.inverse() vs numpy.invert(), vs numpy.linalg.inv():
-1. For a 3x3 matrix:
-   
-   Time for numpy.invert(): 3.090 e-5
-   
-   Time for numpy.linalg.inv(): 2.108 e-2
-   
-   Time for M.inverse(): 1.515 e-4
-   
-2. For a 5x5 matrix:
+<img width="867" height="605" alt="Graph_nnumpy_inverseOfMatrix" src="https://github.com/user-attachments/assets/c17efcde-13ba-4dae-a971-efe78222dd4d" />
 
-   Time for numpy.invert(): 3.410 e-5
-   
-   Time for numpy.linalg.inv(): 2.309 e-2
-   
-   Time for M.inverse(): 3.267 e-4
+Observed the computation speed for the selfmade python inverse function vs the np.invert function. Self made function stayed computationally constant for increased matrix dimension while numpy function started out faster but became exponentially slower. Reasons have to be investigated as well as numpy.linalg.inv function behaviour.
 
-Based on the numbers for 3x3 and 5x5 matrices numpy.invert() is the computationally fastest method and numpy.linalg.inv() the slowest. The homemade python function is similarly fast as the numpy.invert() function with a difference of approximally one order of magnitude. It would be interesting to see the speed different methods for larger matrices e.g. 10x10 or 100x100.  
-For that a reliable invertable matrix generator would be required.  
 
 
 No AI was used for this project.
